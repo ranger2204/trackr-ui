@@ -1,29 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class SignupComponent implements OnInit {
-  signUpForm: FormGroup;
+export class LoginComponent implements OnInit {
+
+  
+  loginForm: FormGroup;
   error: string;
 
   constructor() { 
-    this.signUpForm = this.createSignUpForm()
+    this.loginForm = this.createloginForm()
     this.error = ""
   }
 
-  createSignUpForm(){
+  createloginForm(){
     return new FormGroup({
       username: new FormControl(),
       password: new FormControl(),
-      email: new FormControl()
     })
   }
 
   onSubmit(){
-    console.log(this.signUpForm)
+    console.log(this.loginForm)
     this.error = "Error!"
   }
 
@@ -31,3 +33,4 @@ export class SignupComponent implements OnInit {
   }
 
 }
+
