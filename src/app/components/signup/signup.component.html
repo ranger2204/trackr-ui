@@ -1,0 +1,11 @@
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" novalidate>
+
+    <input formControlName="username" />
+    <input formControlName="password" type='password' />
+    <input formControlName="email" />
+
+    <button type="submit" [disabled]="contactForm.pristine">Save</button>
+    <button type="reset" (click)="revert()" [disabled]="contactForm.pristine">
+    Revert
+    </button>
+</form>

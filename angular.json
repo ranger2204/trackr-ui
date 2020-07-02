@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "trackr"
+    }
+  },
+  "defaultProject": "trackr",
+  "cli": {
+    "analytics": false
+  }
 }
