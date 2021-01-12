@@ -1,0 +1,40 @@
+.card-image{
+    display: flex;
+    height: 150px;
+}
+
+.card-image-top{
+    display: block;
+    max-height:150px;
+    max-width: 150px;
+    width: auto;
+    height: auto;
+    margin: auto;
+}
+
+.card{
+    position: relative;
+    width: 18rem;
+    margin: 2px
+}
+
+.card-body{
+    padding: 1px
+}
+
+.card:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.mat-card-avatar-overlay{
+    /* z-index: 4; */
+    position: absolute;
+    max-width: 30px;
+    height: auto;
+}
+
+.container{
+    max-width: 75%;
+    display: flex;
+    flex-flow: row wrap;
+}

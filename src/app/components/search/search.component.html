@@ -1,1 +1,68 @@
-<p>Searching for {{searchKey}}</p>
+<mat-paginator [length]="totalItems"
+            [pageSize]="pageSize"
+            (page)="changePage($event)">
+</mat-paginator>
+<div class="container">
+        
+        <div class="card" *ngFor="let item of searchList">
+            <img class="mat-card-avatar-overlay float-left top-0" src="{{environment.url}}/images/logo?site={{item.item_website}}"/>
+            <div class="card-image">
+                <img class="card-image-top" src="{{item.item_img_url}}"/>
+            </div>
+            
+            <!-- <button mat-mini-fab class="m-1" title="Add to Watchlist" (click)="add()"><mat-icon>add</mat-icon></button> -->
+            <div class="inline">
+                <button mat-mini-fab color='primary' class="m-1" title="Check Price History" (click)="getPriceHistory(item.item_id)"><mat-icon>show_chart</mat-icon></button>
+                <button mat-mini-fab class="m-1" title="Remove Item" (click)="removeItem(item.item_id)"><mat-icon>close</mat-icon></button>
+            </div>
+            
+            <a href={{item.item_url}}>
+                <h6 class="card-title text-left p-1 m-1" title="{{item.item_name}}">{{trim(item.item_name)}}</h6>
+            </a>
+
+            <div class="card-body m-1">
+                <table class="table table-sm table-borderless table">
+                    <tr>
+                        <td class="card-text float-left">{{item.item_rating}}</td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="card-text text-muted float-left">{{environment.cINR}} {{item.item_latest_price}}</td>
+                    </tr> -->
+                </table>
+                <table class='table table-sm'>
+                    <tr>
+                        <td [class.bg-info]="((item.item_first_price > item.item_latest_price) && (item.item_first_price > item.item_min_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
+                            {{ ((item.item_first_price > item.item_latest_price) && (item.item_first_price > item.item_min_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price)) ? item.item_first_price:''}}
+                        </td>
+                        <td></td>
+                        <td [class.bg-warning]="((item.item_first_price < item.item_latest_price) && (item.item_min_price < item.item_latest_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
+                            {{ ((item.item_first_price < item.item_latest_price) && (item.item_min_price < item.item_latest_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price)) ? item.item_latest_price:''}}
+                        </td>
+        
+                    </tr>
+                    <tr>
+                        <td [class.bg-info]="(item.item_first_price == item.item_min_price) || ((item.item_first_price > item.item_min_price) && (item.item_first_price < item.item_latest_price))">
+                            {{ (item.item_first_price == item.item_min_price) || ((item.item_first_price > item.item_min_price) && (item.item_first_price < item.item_latest_price)) ? item.item_first_price:''}}
+                        </td>
+                        <td [class.bg-success]="(item.item_min_price == item.item_first_price) || (item.item_min_price == item.item_latest_price) || (item.item_first_price == item.item_latest_price)">
+                            {{ (item.item_min_price == item.item_first_price) || (item.item_min_price == item.item_latest_price) || (item.item_first_price == item.item_latest_price) ? item.item_min_price:''}}
+                        </td>
+                        <td [class.bg-warning]="(item.item_min_price == item.item_latest_price) || (item.item_first_price > item.item_latest_price)">
+                            {{ (item.item_min_price == item.item_latest_price) || (item.item_first_price > item.item_latest_price)? item.item_latest_price:''}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td [class.bg-success]="((item.item_first_price > item.item_min_price) && (item.item_latest_price > item.item_first_price)) || ((item.item_latest_price > item.item_min_price) && (item.item_latest_price < item.item_first_price))">
+                            {{ ((item.item_first_price > item.item_min_price) && (item.item_latest_price > item.item_first_price)) || ((item.item_latest_price > item.item_min_price) && (item.item_latest_price < item.item_first_price)) ? item.item_min_price:''}}
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+
+</div>

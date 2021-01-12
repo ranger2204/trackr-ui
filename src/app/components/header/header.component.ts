@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service'
 import { Router } from '@angular/router';
-import { keyframes } from '@angular/animations';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { UserData } from '../../models/UserData';
+import { Subject, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -16,15 +19,59 @@ export class HeaderComponent implements OnInit {
   token: string;
   searchForm: FormGroup;
   error: string;
+  keywordChanged = new Subject<string>();
+  search_list: Array<any>;
 
-  constructor(private searchService: SearchService, private router:Router) { 
+  private storage: string = "settings";
+
+  constructor(private searchService: SearchService, private router:Router, private loginService: AuthenticationService) { 
     this.searchForm = this.createSearchForm()
-    this.authenticated = false;
-    this.username = 'rangerz';
-    this.token = ''
+    this.keywordChanged.pipe(debounceTime(800), distinctUntilChanged()).subscribe((event:any) => this.onMutateSearch(event.target.value))
+  }
+
+  setSettings(userData: UserData){
+    let data = JSON.stringify(userData)
+    console.log(`Set Storage : ${data}`)
+    localStorage.setItem(this.storage, data)
+  }
+
+  getSettings(){
+    let data = localStorage.getItem(this.storage)
+    let userData = new UserData()
+    try{
+      this.loginService.userData = Object.assign(userData, JSON.parse(data))
+      console.log(`Get Storage : ${data}`)
+      this.loginService.updateAuthentication()
+    }
+    catch(err){
+      console.log("Unable to get local storage data")
+    }
+  }
+
+  logout(){
+    //TODO backend call to blacklist token for this username
+    console.log(`logging out ${this.loginService.userData.username}`)
+    this.loginService.userData.invalidate()
+    this.loginService.updateAuthentication()
   }
 
   ngOnInit(): void {
+    let auth_data = this.getSettings()
+
+    this.loginService.currentMessage.subscribe(msg => {
+      console.log(`IN Header msg : ${msg}`)
+      try{
+        let userData = new UserData()
+        userData = Object.assign(userData, JSON.parse(msg))
+        this.setSettings(userData)
+        this.username = userData.username
+        this.authenticated = userData.authenticated
+      }
+      catch{
+        console.log();
+      }
+    })
+
   }
 
   createSearchForm(){
@@ -38,7 +85,26 @@ export class HeaderComponent implements OnInit {
     let searchKey = this.searchForm.value.searchKey
     if(!this.searchForm.value.searchKey)
       searchKey = ''
+    // if(searchKey.length!=0){
+
+    // }
     this.router.navigate(['/search', searchKey])
+  }
+
+  onMutateSearch(keyword: string){
+    if(keyword.length!=0){
+      console.log(`Searching : ${keyword}`)
+      this.searchService.search(keyword).subscribe((response:any) => {
+        if(response.status == 1){
+          this.search_list = response.data
+          console.log(this.search_list)
+        }
+      })
+    }
+    else{
+      this.search_list = []
+    }
+
   }
 
 }

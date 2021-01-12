@@ -5,10 +5,13 @@ import { SignupComponent } from './components/signup/signup.component';
 import { SearchComponent } from './components/search/search.component';
 
 import { combineLatest } from 'rxjs';
+import { AddNewItemComponent } from './components/add-new-item/add-new-item.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: 'signup', component: SignupComponent},
+  { path: 'addnewitem', component: AddNewItemComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'search', component: SearchComponent },
   { path: 'search/:searchKey', component: SearchComponent }
 ];
 
