@@ -9,22 +9,31 @@ export class SearchService {
 
   constructor(private http: HttpClient) { }
 
-  getItem(item_url:any){
-    let url = `${environment.url}/fetch_item`
+  getTLD(hostAddress: string = undefined){
+    if(hostAddress == undefined)
+      return environment.url
+    return hostAddress
+  }
+
+  getItem(item_url:any, hostAddress: string = undefined){
+    let baseURL = this.getTLD(hostAddress)
+    let url = `${baseURL}/fetch_item`
     return this.http.post(url, {
       'item_url': item_url
     })
   }
 
-  putItem(item_url: any){
-    let url = `${environment.url}/fetch_item`;
+  putItem(item_url: any, hostAddress: string = undefined){
+    let baseURL = this.getTLD(hostAddress)
+    let url = `${baseURL}/fetch_item`;
     return this.http.put(url, {
       'item_url': item_url
     })
   }
 
-  removeItem(item_id: string){
-    let url = `${environment.url}/fetch_item`;
+  removeItem(item_id: string, hostAddress: string = undefined){
+    let baseURL = this.getTLD(hostAddress)
+    let url = `${baseURL}/fetch_item`;
     return this.http.delete(url, {
       params: {
         'item_id': item_id
@@ -32,8 +41,9 @@ export class SearchService {
     })
   }
 
-  search(keyword: string, page_no: number=1){
-    let url = `${environment.url}/fetch_item`;
+  search(keyword: string, page_no: number=1, hostAddress: string = undefined){
+    let baseURL = this.getTLD(hostAddress)
+    let url = `${baseURL}/fetch_item`;
     return this.http.get(url, {
       params: {
         'keyword': keyword,
@@ -42,8 +52,9 @@ export class SearchService {
     })
   }
 
-  getItemPriceHisory(item_id: string){
-    let url = `${environment.url}/fetch_price`;
+  getItemPriceHisory(item_id: string, hostAddress: string = undefined){
+    let baseURL = this.getTLD(hostAddress)
+    let url = `${baseURL}/fetch_price`;
     return this.http.get(url, {
       params: {
         'item_id': item_id,

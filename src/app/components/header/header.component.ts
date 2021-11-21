@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   error: string;
   keywordChanged = new Subject<string>();
   search_list: Array<any>;
+  hostAddress: string = ""
 
   private storage: string = "settings";
 
@@ -33,6 +34,12 @@ export class HeaderComponent implements OnInit {
     let data = JSON.stringify(userData)
     console.log(`Set Storage : ${data}`)
     localStorage.setItem(this.storage, data)
+  }
+
+  updateHostAddress(event){
+    this.hostAddress = event.target.value
+    console.log(`Host address : ${this.hostAddress}`)
+    localStorage.setItem('hostAddress', this.hostAddress)
   }
 
   getSettings(){
@@ -57,6 +64,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     let auth_data = this.getSettings()
+    this.hostAddress = localStorage.getItem('hostAddress')
+    if(this.hostAddress == null)
+      localStorage.setItem('hostAddress', 'http://192.168.0.157:5000/')
+      this.hostAddress = localStorage.getItem('hostAddress')
 
     this.loginService.currentMessage.subscribe(msg => {
       console.log(`IN Header msg : ${msg}`)
@@ -94,7 +105,7 @@ export class HeaderComponent implements OnInit {
   onMutateSearch(keyword: string){
     if(keyword.length!=0){
       console.log(`Searching : ${keyword}`)
-      this.searchService.search(keyword).subscribe((response:any) => {
+      this.searchService.search(keyword, 1, this.hostAddress).subscribe((response:any) => {
         if(response.status == 1){
           this.search_list = response.data
           console.log(this.search_list)

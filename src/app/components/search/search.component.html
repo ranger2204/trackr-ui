@@ -1,11 +1,15 @@
-<mat-paginator [length]="totalItems"
-            [pageSize]="pageSize"
-            (page)="changePage($event)">
-</mat-paginator>
+<div class="input-group float-right">
+    <mat-paginator [length]="totalItems"
+        [pageSize]="pageSize"
+        (page)="changePage($event)">
+    </mat-paginator>
+
+</div>
+
 <div class="container">
         
         <div class="card" *ngFor="let item of searchList">
-            <img class="mat-card-avatar-overlay float-left top-0" src="{{environment.url}}/images/logo?site={{item.item_website}}"/>
+            <img class="mat-card-avatar-overlay float-left top-0" src="{{hostAddress}}/images/logo?site={{item.item_website}}"/>
             <div class="card-image">
                 <img class="card-image-top" src="{{item.item_img_url}}"/>
             </div>
