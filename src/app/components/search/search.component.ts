@@ -22,6 +22,7 @@ export class SearchComponent implements OnInit {
   totalItems:number = 0;
   currentPage:number = 0;
   itemPriceHistory = {}
+  hostAddress = ""
 
   constructor(private route: ActivatedRoute, 
     private searchService: SearchService, 
@@ -31,12 +32,39 @@ export class SearchComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    this.hostAddress = localStorage.getItem('hostAddress')
     this.sub = this.route.params.subscribe(params => {
       this.searchKey = params['searchKey']
       if(this.searchKey == undefined)
         this.searchKey = ""
       this.search(this.searchKey)
     })
+  }
+
+  updateHostAddress(event){
+    this.hostAddress = event.target.value
+    console.log(this.hostAddress)
+  }
+
+  toggleItemEmailFlag(event, itemId){
+    this.hostAddress = localStorage.getItem('hostAddress')
+    this.searchService.toggleItemEmailFlag(itemId, this.hostAddress).subscribe(resp => {
+      console.log(resp)
+      switch (resp['data'][0]['item_email_flag']) {
+        case '1':
+          event.source.checked = true;
+          break;
+        case '0':
+          event.source.checked = false;
+          break;
+        default:
+          break;
+      }
+      
+    }, error => {
+      event.source.checked = !event.checked
+    })
+
   }
 
   chartDataConverter(items: Array<any>){
@@ -53,6 +81,7 @@ export class SearchComponent implements OnInit {
   }
 
   getPriceHistory(item_id: string): void{
+    this.hostAddress = localStorage.getItem('hostAddress')
     if(item_id in this.itemPriceHistory){
       const dialogRef = this.PriceDialog.open(PriceDialog, {
         width: '60%',
@@ -60,7 +89,7 @@ export class SearchComponent implements OnInit {
       });
     }
     else{
-      this.searchService.getItemPriceHisory(item_id).subscribe((response:any) => {
+      this.searchService.getItemPriceHisory(item_id, this.hostAddress).subscribe((response:any) => {
         if(response.status == 1){
           // this.itemPriceHistory[item_id] = this.chartDataConverter(response.data)
           console.log(response.data)
@@ -96,7 +125,7 @@ export class SearchComponent implements OnInit {
   }
 
   removeItem(item_id:string){
-    this.searchService.removeItem(item_id).subscribe((response:any) => {
+    this.searchService.removeItem(item_id, this.hostAddress).subscribe((response:any) => {
       if(response.status == 1){
         this.notifierService.notify('success', response.message)
         this.search(this.searchKey, this.currentPage)
@@ -108,7 +137,9 @@ export class SearchComponent implements OnInit {
   }
 
   search(keyword:string, page_no:number=1){
-    this.searchService.search(keyword, page_no).subscribe((response:any) => {
+    this.hostAddress = localStorage.getItem('hostAddress')
+    console.log(`Searching : ${keyword} : ${this.hostAddress}`)
+    this.searchService.search(keyword, page_no, this.hostAddress).subscribe((response:any) => {
       if(response.status == 1){
         this.searchList = response.data
         this.totalItems = response.total
