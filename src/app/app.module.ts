@@ -26,6 +26,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog'
 import { HighchartsChartComponent } from 'highcharts-angular';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { HighchartsChartComponent } from 'highcharts-angular';
     NotifierModule,
     MatAutocompleteModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSlideToggleModule
   ],
   providers: [AuthenticationService, SearchService],
   bootstrap: [AppComponent]

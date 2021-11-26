@@ -1,11 +1,15 @@
-<mat-paginator [length]="totalItems"
-            [pageSize]="pageSize"
-            (page)="changePage($event)">
-</mat-paginator>
+<div class="input-group float-right">
+    <mat-paginator [length]="totalItems"
+        [pageSize]="pageSize"
+        (page)="changePage($event)">
+    </mat-paginator>
+
+</div>
+
 <div class="container">
         
         <div class="card" *ngFor="let item of searchList">
-            <img class="mat-card-avatar-overlay float-left top-0" src="{{environment.url}}/images/logo?site={{item.item_website}}"/>
+            <img class="mat-card-avatar-overlay float-left top-0" src="{{hostAddress}}/images/logo?site={{item.item_website}}"/>
             <div class="card-image">
                 <img class="card-image-top" src="{{item.item_img_url}}"/>
             </div>
@@ -14,6 +18,11 @@
             <div class="inline">
                 <button mat-mini-fab color='primary' class="m-1" title="Check Price History" (click)="getPriceHistory(item.item_id)"><mat-icon>show_chart</mat-icon></button>
                 <button mat-mini-fab class="m-1" title="Remove Item" (click)="removeItem(item.item_id)"><mat-icon>close</mat-icon></button>
+                <mat-slide-toggle
+                    (change)="toggleItemEmailFlag($event, item.item_id)"
+                    [checked]="item.item_email_flag==1"
+                    >
+                </mat-slide-toggle>
             </div>
             
             <a href={{item.item_url}}>
@@ -60,6 +69,18 @@
                     </tr>
                 </table>
             </div>
+            <div>
+            
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="new tag">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
 
