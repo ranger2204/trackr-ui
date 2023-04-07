@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment'
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as Highcharts from 'highcharts';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -23,6 +24,17 @@ export class SearchComponent implements OnInit {
   currentPage:number = 0;
   itemPriceHistory = {}
   hostAddress = ""
+  updateDateTime = ""
+  updateStats = ""
+  itemTags = {}
+  tagList = []
+  allTags = []
+  tagSearchTO = null;
+  filterOpen = false;
+  tagFilter = []
+  priceFilter = []
+
+  priceStrings: Array<String> = ["all_time_low", 'lower_than_first']
 
   constructor(private route: ActivatedRoute, 
     private searchService: SearchService, 
@@ -33,17 +45,83 @@ export class SearchComponent implements OnInit {
   
   ngOnInit(): void {
     this.hostAddress = localStorage.getItem('hostAddress')
+    this.getAllTags()
     this.sub = this.route.params.subscribe(params => {
       this.searchKey = params['searchKey']
+      
       if(this.searchKey == undefined)
         this.searchKey = ""
-      this.search(this.searchKey)
+      let filters = this.createFilters(this.searchKey, this.tagFilter, this.priceFilter)
+      this.search(filters)
     })
+  }
+
+  createFilters(keyword, tagFilter, priceFilter){
+    let filters = {
+      'keyword': keyword,
+      'tags': tagFilter.join(','),
+      'price': priceFilter.join(',')
+    }
+    return filters
+  }
+
+  updateTagFilter(tag: string){
+    this.updateArray(this.tagFilter, tag)
+  }
+
+  getRevised(){
+    let filters = this.createFilters(this.searchKey, this.tagFilter, this.priceFilter)
+    this.search(filters)
+  }
+
+  updateArray(source:Array<any>, tag: string){
+    let index = source.indexOf(tag)
+    if(index == -1)
+      source.push(tag)
+    else
+      source.splice(index, 1)
+  }
+
+  updatePriceFilter(tag){
+    this.updateArray(this.priceFilter, tag)
+  }
+
+  inFilter(filterArray, tag){
+    return filterArray.indexOf(tag) != -1
   }
 
   updateHostAddress(event){
     this.hostAddress = event.target.value
     console.log(this.hostAddress)
+  }
+
+  getAllTags(){
+    this.tagSearchTO = setTimeout(()=>{
+      this.searchService.getMatchingTags("").subscribe((resp: any) => {
+        this.allTags = resp.data
+        console.log(this.allTags)
+      })
+    }, 1000)
+  }
+
+  getMatchingTags(itemId: number, element: any){
+    // console.log(element)
+    let tag = element.value;
+    if(tag.slice(-1) == ' '){
+      this.addTag(itemId, tag.trim())
+      element.value = ''
+      return
+    }
+    if(tag.length < 2)
+      return
+    if(this.tagSearchTO != null){
+      clearTimeout(this.tagSearchTO)
+    }
+    this.tagSearchTO = setTimeout(()=>{
+      this.searchService.getMatchingTags(tag).subscribe((resp: any) => {
+        this.tagList = resp.data
+      })
+    }, 1000)
   }
 
   toggleItemEmailFlag(event, itemId){
@@ -78,6 +156,13 @@ export class SearchComponent implements OnInit {
     }
     console.table(result)
     return result
+  }
+
+  getUpdateStats(){
+    this.searchService.getUpdateStats(this.hostAddress).subscribe((resp:any) => {
+      this.updateStats = `${resp.data['upd_missed_items']}/${resp.data['upd_total_items']}`
+      this.updateDateTime = `${resp.data['upd_end_datetime']}`
+    })
   }
 
   getPriceHistory(item_id: string): void{
@@ -117,7 +202,8 @@ export class SearchComponent implements OnInit {
 
   changePage(event:PageEvent){
     this.currentPage = event.pageIndex + 1
-    this.search(this.searchKey, event.pageIndex+1)
+    let filters = this.createFilters(this.searchKey, this.tagFilter, this.priceFilter)
+    this.search(filters, event.pageIndex+1)
   }
 
   trim(name:string, max_chars=100){
@@ -136,12 +222,76 @@ export class SearchComponent implements OnInit {
     })
   }
 
-  search(keyword:string, page_no:number=1){
+  getTags(){
+    this.searchService.getTags(this.searchList).subscribe((resp: any) => {
+      this.itemTags = resp.data
+    })
+  }
+
+  toggleFilterTab(){
+    this.filterOpen = !this.filterOpen
+    // if(this.filterOpen){
+    //   document.getElementById('sidenav-filter').style.width = '50%'
+    // }
+    // else{
+    //   document.getElementById('sidenav-filter').style.width = '0px'
+    // }
+
+  }
+
+
+  checkTags(inTags: Array<any>, tag: string){
+    for(let i=0;i<inTags.length;i++)
+    {
+      let t = inTags[i]
+      if(t.tag_text === tag)
+        return 1
+    }
+    return -1
+  }
+
+  addTag(itemId, tag: string){
+    if(tag == null){
+      let inp = document.getElementById("input-"+itemId) as HTMLInputElement
+      tag = inp.value
+    }
+    if(tag.length == 0)
+      return
+    console.log(this.itemTags[itemId])
+    if(this.checkTags(this.itemTags[itemId], tag) == -1)
+      this.searchService.addTag(itemId, tag).subscribe((resp: any) => {
+        
+        this.itemTags[itemId] = resp.data[itemId]
+        // console.log(this.itemTags)
+      })
+    else{
+      console.log(`${tag} already exists for ${itemId}`)
+    }
+  }
+
+  removeTag(tagId, itemId){
+    this.searchService.removeTag(tagId, itemId).subscribe((resp: any) => {
+      this.itemTags[itemId] = resp.data[itemId]
+      // console.log(this.itemTags)
+    })
+  }
+
+  search(filters, page_no:number=1){
+    console.log(filters)
+    let keyword = filters['keyword']
+    this.getUpdateStats()
     this.hostAddress = localStorage.getItem('hostAddress')
     console.log(`Searching : ${keyword} : ${this.hostAddress}`)
-    this.searchService.search(keyword, page_no, this.hostAddress).subscribe((response:any) => {
+    this.searchService.search(filters, page_no, this.hostAddress).subscribe((response:any) => {
       if(response.status == 1){
         this.searchList = response.data
+        this.itemTags = {}
+        for(let i=0;i<this.searchList.length;i++){
+          let item = this.searchList[i]
+          this.itemTags[item.item_id] = []
+        }
+        this.getTags()
+
         this.totalItems = response.total
         console.log(this.searchList)
         this.currentPage = 1

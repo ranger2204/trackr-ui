@@ -3,10 +3,13 @@
 
     <div class="navbar-nav w-50 m-auto p-2">
         <form [formGroup]='searchForm' (ngSubmit)="onSubmit()" class="input-group input-group-lg">
-            <input class="form-control" formControlName="searchKey" type="text" placeholder="Search" (keyup)="keywordChanged.next($event)" [matAutocomplete] = "auto"> 
+            <input class="form-control" formControlName="searchKey" type="text" placeholder="Search"
+            (keyup.enter)="onSubmit()"
+            (keyup)="keywordChanged.next($event)" [matAutocomplete] = "auto"> 
             <mat-autocomplete #auto = "matAutocomplete">
-                <mat-option *ngFor = "let item_details of search_list">
-                   {{item_details.item_name}}
+                <mat-option *ngFor = "let item_details of search_list" (click)="searchForm.value.searchKey=item_details.item_name;onSubmit()">
+                    <img src="{{item_details.item_img_url}}" class="group_item_img">
+                    {{item_details.item_name}}
                 </mat-option>
             </mat-autocomplete>
             <div class="input-group-append">
@@ -15,6 +18,9 @@
         </form>
         <button mat-raised-button color="secondary" class="rounded-0" routerLink="/addnewitem">
             <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="secondary" class="rounded-0" routerLink="/groups">
+            <mat-icon>content_copy</mat-icon>
         </button>
     </div>
 
@@ -42,6 +48,5 @@
     </div>
         
     <notifier-container></notifier-container>
-
     <input type="text" class="m-2" style="width: 200px;"  [value]="hostAddress" (keyup)="updateHostAddress($event)">
 </nav>

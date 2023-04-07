@@ -18,6 +18,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { SearchComponent } from './components/search/search.component';
+import { GroupsComponent } from './components/groups/groups.component';
 import { AddNewItemComponent } from './components/add-new-item/add-new-item.component'
 import { NotifierModule } from "angular-notifier";
 import { AuthenticationService } from './services/authentication.service'
@@ -27,6 +28,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog'
 import { HighchartsChartComponent } from 'highcharts-angular';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     LoginComponent,
     SearchComponent,
     AddNewItemComponent,
-    HomeComponent
+    HomeComponent,
+    GroupsComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,9 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatChipsModule,
+    MatExpansionModule
   ],
   providers: [AuthenticationService, SearchService],
   bootstrap: [AppComponent]

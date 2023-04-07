@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let group of groups" (click)="changeGroup(group)">
+                    {{group.group_name}}
+                    <button mat-icon-button (click)="removeGroup(group.group_id)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                </li>
+            
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="New Group" [value]=newGroupName (keyup)="newGroupName=$event.target.value">
+                        <div class="input-group-append">
+                          <button mat-icon-button (click)="createGroup()">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="col-8">
+            <h3>
+                {{currentGroup.group_name}}
+            </h3>
+            <div id="group_price_chart"></div>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of currentGroupItems">
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="{{item.item_img_url}}" class="group_item_img">
+                        </div>
+                        <div class="col-4">
+                            <a href="{{item.item_url}}">{{item.item_name}}</a>
+                        </div>
+                        <div class="col-4">
+                            <code>Rs. {{item.item_latest_price}}</code>
+                        </div>
+                        <div class="col-2">
+                            <button mat-icon-button (click)="removeItemFromGroup(item.g_id)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+    
+                        </div>
+
+                    </div>
+                    
+                    
+                    
+                </li>
+                <li class="list-group-item">
+                    <div class="input-group">
+
+                        <input class="form-control" type="text" placeholder="New Item" [value]=currentItem.item_name (keyup)="onMutateItemSearch($event.target.value)" [matAutocomplete] = "auto"> 
+                        <mat-autocomplete #auto = "matAutocomplete">
+                            <mat-option *ngFor = "let item_details of itemSearchList" (click)="currentItem=item_details">
+                                <img src="{{item_details.item_img_url}}" class="group_item_img">
+                                {{item_details.item_name}}
+                                <code>Rs. {{item_details.item_latest_price}}</code>
+                            </mat-option>
+                        </mat-autocomplete>
+
+                        <div class="input-group-append">
+                          <button mat-button (click)="addItemToGroup()">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</div>
+

@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
   onMutateSearch(keyword: string){
     if(keyword.length!=0){
       console.log(`Searching : ${keyword}`)
-      this.searchService.search(keyword, 1, this.hostAddress).subscribe((response:any) => {
+      this.searchService.search({'keyword': keyword, 'tags': '', 'price':''}, 1, this.hostAddress).subscribe((response:any) => {
         if(response.status == 1){
           this.search_list = response.data
           console.log(this.search_list)

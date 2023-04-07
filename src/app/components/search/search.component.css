@@ -38,3 +38,35 @@
     display: flex;
     flex-flow: row wrap;
 }
+
+.btn {
+    padding: 1px;
+}
+
+.mat-icon{
+    transform: scale(0.8);
+}
+
+button[mat-mini-fab] {
+    transform: scale(0.8);
+}
+
+.mat-slide-toggle {
+    transform: scale(0.8);
+}
+
+.sidenav {
+    height: 20%;
+    position: fixed;
+    z-index: 1;
+    top: 10;
+    right: 0;
+    
+}
+
+.filtertab {
+    overflow-x: hidden;
+    padding-top: 60px;
+    width: 0;
+    transition: 0.5s;
+}
