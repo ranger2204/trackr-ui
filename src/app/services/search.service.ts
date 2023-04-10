@@ -18,7 +18,7 @@ export class SearchService {
 
   getUpdateStats(hostAddress: string = undefined){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/update_history`;
+    let url = `${baseURL}/update_history/`;
     return this.http.get(url)
   }
 
@@ -34,7 +34,7 @@ export class SearchService {
 
   getMatchingTags(tagText){
     let baseURL = this.getTLD(null)
-    let url = `${baseURL}/tag`;
+    let url = `${baseURL}/tag/`;
     return this.http.get(url, {
       params: {
         'tagText': tagText
@@ -44,7 +44,7 @@ export class SearchService {
 
   getTags(items, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/tag`;
+    let url = `${baseURL}/tag/`;
     return this.http.get(url, {
       params: {
         'itemIds': items.map(i => i.item_id).join(',')
@@ -54,7 +54,7 @@ export class SearchService {
 
   addTag(itemId: Number, tagText: String, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/tag`;
+    let url = `${baseURL}/tag/`;
     return this.http.put(url, {
       'itemId': itemId.toString(),
       'tagText': tagText
@@ -63,7 +63,7 @@ export class SearchService {
 
   removeTag(tagId: Number, itemId: Number, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/tag`;
+    let url = `${baseURL}/tag/`;
     return this.http.delete(url, {
       params: {
         'tagId': tagId.toString(),
@@ -101,7 +101,7 @@ export class SearchService {
 
   getItem(item_url:any, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/fetch_item`
+    let url = `${baseURL}/fetch_item/`
     return this.http.post(url, {
       'item_url': item_url
     })
@@ -109,7 +109,7 @@ export class SearchService {
 
   putItem(item_url: any, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/fetch_item`;
+    let url = `${baseURL}/fetch_item/`;
     return this.http.put(url, {
       'item_url': item_url
     })
@@ -117,7 +117,7 @@ export class SearchService {
 
   removeItem(item_id: string, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/fetch_item`;
+    let url = `${baseURL}/fetch_item/`;
     return this.http.delete(url, {
       params: {
         'item_id': item_id
@@ -128,7 +128,7 @@ export class SearchService {
   search(filters: any, page_no: number=1, hostAddress: string = null){
     console.log(filters)
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/fetch_item`;
+    let url = `${baseURL}/fetch_item/`;
     return this.http.get(url, {
       params: {
         'keyword': filters['keyword'],
@@ -141,7 +141,7 @@ export class SearchService {
 
   getItemPriceHisory(item_id: string, hostAddress: string = null){
     let baseURL = this.getTLD(hostAddress)
-    let url = `${baseURL}/fetch_price`;
+    let url = `${baseURL}/fetch_price/`;
     return this.http.get(url, {
       params: {
         'item_id': item_id,
