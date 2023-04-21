@@ -38,7 +38,7 @@ export class SearchService {
     });
   }
 
-  addTag(itemId: Number, tagText: String, hostAddress: string = "") {
+  addTag(itemId: string, tagText: String, hostAddress: string = "") {
     let baseURL = this.getTLD(hostAddress);
     let url = `${baseURL}/tag/`;
     return this.http.put(url, {
@@ -47,7 +47,7 @@ export class SearchService {
     });
   }
 
-  removeTag(tagId: Number, itemId: Number, hostAddress: string = "") {
+  removeTag(tagId: string, itemId: string, hostAddress: string = "") {
     let baseURL = this.getTLD(hostAddress);
     let url = `${baseURL}/tag/`;
     return this.http.delete(url, {
@@ -55,14 +55,6 @@ export class SearchService {
         tagId: tagId.toString(),
         itemId: itemId.toString(),
       },
-    });
-  }
-
-  toggleItemEmailFlag(itemId: string, hostAddress: string) {
-    let baseURL = this.getTLD(hostAddress);
-    let url = `${baseURL}item/${itemId}/update`;
-    return this.http.put(url, {
-      update_type: 'toggle_email_flag',
     });
   }
 

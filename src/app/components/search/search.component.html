@@ -69,9 +69,6 @@
             <button mat-mini-fab class="m-1" title="Remove Item" (click)="removeItem(item.item_id)">
                 <mat-icon>close</mat-icon>
             </button>
-            <mat-slide-toggle title="Notify?" (change)="toggleItemEmailFlag($event, item.item_id)"
-                [checked]="item.item_email_flag==1" class=".inner-slider m-1">
-            </mat-slide-toggle>
         </div>
 
         <a href={{item.item_url}}>
