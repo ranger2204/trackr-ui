@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // url: "http://localhost:5000",
-  url:'http://192.168.0.171:5000',
+  url: "http://localhost:8000",
+  // url:'http://192.168.0.171:5000',
   cINR: '₹'
 };
 

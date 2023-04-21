@@ -17,19 +17,19 @@ import { SearchService } from 'src/app/services/search.service';
 })
 export class SearchComponent implements OnInit {
   chart: any;
-  hostAddress: string;
-  searchKey: string;
-  searchList: Array<any>;
+  hostAddress: string = "";
+  searchKey: string = "";
+  searchList: Array<any> = [];
   pageSize: number = 15;
   totalItems: number = 0;
   currentPage: number = 0;
   itemPriceHistory = {};
   updateDateTime = '';
   updateStats = '';
-  itemTags = {};
+  itemTags: any = {};
   tagList = [];
   allTags = [];
-  tagSearchTO = null;
+  tagSearchTO: any = null;
   filterOpen = false;
   tagFilter = [];
   priceFilter = [];
@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hostAddress = localStorage.getItem('hostAddress');
+    this.hostAddress = localStorage.getItem('hostAddress') || "";
     this.getAllTags();
     this.route.params.subscribe((params) => {
       this.searchKey = params['searchKey'];
@@ -59,7 +59,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  createFilters(keyword, tagFilter, priceFilter) {
+  createFilters(keyword: any, tagFilter: any, priceFilter: any) {
     let filters = {
       keyword: keyword,
       tags: tagFilter.join(','),
@@ -87,11 +87,11 @@ export class SearchComponent implements OnInit {
     else source.splice(index, 1);
   }
 
-  updatePriceFilter(tag) {
+  updatePriceFilter(tag: any) {
     this.updateArray(this.priceFilter, tag);
   }
 
-  inFilter(filterArray, tag) {
+  inFilter(filterArray: any, tag: any) {
     return filterArray.indexOf(tag) != -1;
   }
 
@@ -123,11 +123,11 @@ export class SearchComponent implements OnInit {
     }, 1000);
   }
 
-  toggleItemEmailFlag(event, itemId) {
-    this.searchService.toggleItemEmailFlag(itemId, localStorage.getItem('hostAddress')).subscribe({
+  toggleItemEmailFlag(event: any, itemId: any) {
+    this.searchService.toggleItemEmailFlag(itemId, localStorage.getItem('hostAddress') || "").subscribe({
       next: (resp) => {
         console.log(resp);
-        switch (resp['data'][0]['item_email_flag']) {
+        switch ((resp as any)['data'][0]['item_email_flag']) {
           case '1':
             event.source.checked = true;
             break;
@@ -159,7 +159,7 @@ export class SearchComponent implements OnInit {
 
   getUpdateStats() {
     this.searchService
-      .getUpdateStats(localStorage.getItem('hostAddress'))
+      .getUpdateStats(localStorage.getItem('hostAddress') || "")
       .subscribe((resp: any) => {
         this.updateStats = `${resp.data['upd_missed_items']}/${resp.data['upd_total_items']}`;
         this.updateDateTime = `${resp.data['upd_end_datetime']}`;
@@ -170,20 +170,20 @@ export class SearchComponent implements OnInit {
     if (item_id in this.itemPriceHistory) {
       this.PriceDialog.open(PriceDialog, {
         width: '60%',
-        data: this.itemPriceHistory[item_id],
+        data: (this.itemPriceHistory as any)[item_id],
       });
     } else {
       this.searchService
-        .getItemPriceHisory(item_id, localStorage.getItem('hostAddress'))
+        .getItemPriceHisory(item_id, localStorage.getItem('hostAddress') || "")
         .subscribe((response: any) => {
           if (response.status == 1) {
             // this.itemPriceHistory[item_id] = this.chartDataConverter(response.data)
             console.log(response.data);
-            this.itemPriceHistory[item_id] = response.data;
+            (this.itemPriceHistory as any)[item_id] = response.data;
             this.notifierService.success(response.message);
             this.PriceDialog.open(PriceDialog, {
               width: '60%',
-              data: this.itemPriceHistory[item_id],
+              data: (this.itemPriceHistory as any)[item_id],
             });
           } else {
             this.notifierService.success(response.message);
@@ -208,7 +208,7 @@ export class SearchComponent implements OnInit {
 
   removeItem(item_id: string) {
     this.searchService
-      .removeItem(item_id, localStorage.getItem('hostAddress'))
+      .removeItem(item_id, localStorage.getItem('hostAddress') || "")
       .subscribe((response: any) => {
         if (response.status == 1) {
           this.notifierService.success(response.message);
@@ -237,7 +237,7 @@ export class SearchComponent implements OnInit {
     return -1;
   }
 
-  addTag(itemId, event: Event | string) {
+  addTag(itemId: any, event: Event | string) {
     let tag: string = '';
     if (event instanceof Event) {
       const element = event.currentTarget as HTMLInputElement;
@@ -251,10 +251,10 @@ export class SearchComponent implements OnInit {
       tag = inp.value;
     }
     if (tag.length == 0) return;
-    console.log(this.itemTags[itemId]);
-    if (this.checkTags(this.itemTags[itemId], tag) == -1)
+    console.log((this.itemTags as any)[itemId]);
+    if (this.checkTags((this.itemTags as any)[itemId], tag) == -1)
       this.searchService.addTag(itemId, tag).subscribe((resp: any) => {
-        this.itemTags[itemId] = resp.data[itemId];
+        (this.itemTags as any)[itemId] = resp.data[itemId];
         // console.log(this.itemTags)
       });
     else {
@@ -262,26 +262,26 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  removeTag(tagId, itemId) {
+  removeTag(tagId: any, itemId: any) {
     this.searchService.removeTag(tagId, itemId).subscribe((resp: any) => {
-      this.itemTags[itemId] = resp.data[itemId];
+      (this.itemTags as any)[itemId] = resp.data[itemId];
     });
   }
 
-  search(filters, page_no: number = 1) {
+  search(filters: any, page_no: number = 1) {
     console.log(filters);
     let keyword = filters['keyword'];
     this.getUpdateStats();
     console.log(`Searching : ${keyword} : ${localStorage.getItem('hostAddress')}`);
     this.searchService
-      .search(filters, page_no, localStorage.getItem('hostAddress'))
+      .search(filters, page_no, localStorage.getItem('hostAddress') || "")
       .subscribe((response: any) => {
         if (response.status == 1) {
           this.searchList = response.data;
           this.itemTags = {};
           for (let i = 0; i < this.searchList.length; i++) {
             let item = this.searchList[i];
-            this.itemTags[item.item_id] = [];
+            (this.itemTags as any)[item.item_id] = [];
           }
           this.getTags();
 
@@ -308,7 +308,7 @@ export class PriceDialog {
     @Inject(MAT_DIALOG_DATA) public data: Array<any>
   ) {}
 
-  createChart(data) {
+  createChart(data: any) {
     this.chart = new Chart('PriceChart', {
       type: 'line',
       data: {

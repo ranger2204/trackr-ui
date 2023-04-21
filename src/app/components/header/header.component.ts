@@ -13,7 +13,7 @@ import { SearchService } from '../../services/search.service';
 export class HeaderComponent implements OnInit {
   searchForm: FormGroup;
   keywordChanged = new Subject<string>();
-  search_list: Array<any>;
+  search_list: Array<any> = [];
   hostAddress: string = '';
 
   constructor(private searchService: SearchService, private router: Router) {
@@ -30,10 +30,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hostAddress = localStorage.getItem('hostAddress');
-    if (this.hostAddress == null)
-      localStorage.setItem('hostAddress', 'http://192.168.0.157:5000/');
-    this.hostAddress = localStorage.getItem('hostAddress');
+    this.hostAddress =
+      localStorage.getItem('hostAddress') || 'http://192.168.0.157:5000/';
   }
 
   createSearchForm() {
@@ -55,6 +53,7 @@ export class HeaderComponent implements OnInit {
         .subscribe((response: any) => {
           if (response.status == 1) {
             this.search_list = response.data;
+            console.log("RESPONSE DATA: ", response.data);
           }
         });
     } else {
