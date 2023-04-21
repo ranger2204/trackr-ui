@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SearchService } from '../../services/search.service';
+import { SearchResultItem } from 'src/app/models/SearchPage';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +13,8 @@ import { SearchService } from '../../services/search.service';
 })
 export class HeaderComponent implements OnInit {
   searchForm: FormGroup;
-  keywordChanged = new Subject<string>();
-  search_list: Array<any> = [];
+  keywordChanged = new Subject<KeyboardEvent>();
+  search_list: SearchResultItem[] = [];
   hostAddress: string = '';
 
   constructor(private searchService: SearchService, private router: Router) {
@@ -53,7 +54,6 @@ export class HeaderComponent implements OnInit {
         .subscribe((response: any) => {
           if (response.status == 1) {
             this.search_list = response.data;
-            console.log("RESPONSE DATA: ", response.data);
           }
         });
     } else {

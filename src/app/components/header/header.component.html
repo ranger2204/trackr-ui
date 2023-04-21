@@ -4,7 +4,7 @@
     <div class="navbar-nav w-50 m-auto p-2">
         <form [formGroup]='searchForm' (ngSubmit)="onSubmit()" class="input-group input-group-lg">
             <input class="form-control" formControlName="searchKey" type="text" placeholder="Search"
-                (keyup.enter)="onSubmit()" (keyup)="keywordChanged.next($event.toString())" [matAutocomplete]="auto">
+                (keyup.enter)="onSubmit()" (keyup)="keywordChanged.next($event)" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let item_details of search_list"
                     (click)="searchForm.value.searchKey=item_details.item_name;onSubmit()">
