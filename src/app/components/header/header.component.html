@@ -4,16 +4,17 @@
     <div class="navbar-nav w-50 m-auto p-2">
         <form [formGroup]='searchForm' (ngSubmit)="onSubmit()" class="input-group input-group-lg">
             <input class="form-control" formControlName="searchKey" type="text" placeholder="Search"
-            (keyup.enter)="onSubmit()"
-            (keyup)="keywordChanged.next($event)" [matAutocomplete] = "auto"> 
-            <mat-autocomplete #auto = "matAutocomplete">
-                <mat-option *ngFor = "let item_details of search_list" (click)="searchForm.value.searchKey=item_details.item_name;onSubmit()">
+                (keyup.enter)="onSubmit()" (keyup)="keywordChanged.next($event.toString())" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item_details of search_list"
+                    (click)="searchForm.value.searchKey=item_details.item_name;onSubmit()">
                     <img src="{{item_details.item_img_url}}" class="group_item_img">
                     {{item_details.item_name}}
                 </mat-option>
             </mat-autocomplete>
             <div class="input-group-append">
-                <button mat-raised-button color="primary" class="rounded-0" type="submit"><i class="fa fa-search"></i></button>
+                <button mat-raised-button color="primary" class="rounded-0" type="submit"><i
+                        class="fa fa-search"></i></button>
             </div>
         </form>
         <button mat-raised-button color="secondary" class="rounded-0" routerLink="/addnewitem">
@@ -24,29 +25,5 @@
         </button>
     </div>
 
-
-    
-
-
-    <!-- <div *ngIf=!authenticated class="btn-group m-0 float-right">
-        <button class="btn btn-dark rounded-0" routerLink="/signup">SignUp</button>
-        <button class="btn btn-dark rounded-0" routerLink="/login">Login</button>
-    </div> -->
-    <div *ngIf=authenticated class="btn-group m-0 float-right pr-3">
-        <button [matMenuTriggerFor]="userMenu" class="btn btn-outline-danger rounded-0 text-uppercase">{{username}}</button>
-        <mat-menu #userMenu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>list</mat-icon>
-                <span>WatchList</span>
-            </button>
-            <button mat-menu-item>
-                <mat-icon>settings</mat-icon>
-                <span>Settings</span>
-            </button>
-        </mat-menu>
-        <a class="btn btn-danger rounded-0" title="Click to Logout" (click)="logout()"><i class='fa fa-power-off'></i></a>
-    </div>
-        
-    <notifier-container></notifier-container>
-    <input type="text" class="m-2" style="width: 200px;"  [value]="hostAddress" (keyup)="updateHostAddress($event)">
+    <input type="text" class="m-2" style="width: 200px;" [value]="hostAddress" (keyup)="updateHostAddress($event)">
 </nav>

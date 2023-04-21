@@ -1,70 +1,65 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SignupComponent } from './components/signup/signup.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatAutocompleteModule } from '@angular/material/autocomplete'
-import { MatGridListModule } from '@angular/material/grid-list'
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { LoginComponent } from './components/login/login.component';
-import { SearchComponent } from './components/search/search.component';
-import { GroupsComponent } from './components/groups/groups.component';
-import { AddNewItemComponent } from './components/add-new-item/add-new-item.component'
-import { NotifierModule } from "angular-notifier";
-import { AuthenticationService } from './services/authentication.service'
-import { SearchService } from './services/search.service';
-import { HomeComponent } from './components/home/home.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatDialogModule } from '@angular/material/dialog'
-import { HighchartsChartComponent } from 'highcharts-angular';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AddNewItemComponent } from './components/add-new-item/add-new-item.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SearchComponent } from './components/search/search.component';
+import { SearchService } from './services/search.service';
+
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    SignupComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoginComponent,
-    SearchComponent,
     AddNewItemComponent,
-    HomeComponent,
-    GroupsComponent
+    AppComponent,
+    FooterComponent,
+    HeaderComponent,
+    SearchComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatInputModule,
-    MatFormFieldModule,
+    BrowserModule,
+    HttpClientModule,
+    MatAutocompleteModule,
+    MatBadgeModule,
     MatButtonModule,
     MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatGridListModule,
-    HttpClientModule,
-    NotifierModule,
-    MatAutocompleteModule,
-    MatPaginatorModule,
-    MatDialogModule,
-    MatSlideToggleModule,
     MatChipsModule,
-    MatExpansionModule
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot({ positionClass: 'toast-bottom-left' }),
   ],
-  providers: [AuthenticationService, SearchService],
-  bootstrap: [AppComponent]
+  providers: [SearchService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

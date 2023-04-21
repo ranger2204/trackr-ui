@@ -1,9 +1,7 @@
 <div class="input-group float-right">
-    <mat-paginator [length]="totalItems"
-        [pageSize]="pageSize"
-        (page)="changePage($event)">
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" (page)="changePage($event)">
     </mat-paginator>
-    <p class="float-left m-3" >
+    <p class="float-left m-3">
         <span class="text-danger">{{updateStats}}</span> MISSED @ <span class="text-info">{{this.updateDateTime}}</span>
     </p>
 </div>
@@ -19,7 +17,6 @@
             </td>
             <td class="filtertab" id="sidenav-filter" *ngIf="filterOpen">
                 <mat-accordion multi>
-
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -28,132 +25,131 @@
                         </mat-expansion-panel-header>
                         <div class="inline-block">
                             <h5 *ngFor="let tag of priceStrings" class="float-left m-1">
-                                <span class="badge" (click)="updatePriceFilter(tag); getRevised();" [class.badge-info]="inFilter(priceFilter, tag)">{{tag}}</span>
+                                <mat-chip-listbox>
+                                    <mat-chip class="badge" (click)="updatePriceFilter(tag); getRevised();"
+                                        [class.badge-info]="inFilter(priceFilter, tag)">{{tag}}</mat-chip>
+                                </mat-chip-listbox>
                             </h5>
                         </div>
                     </mat-expansion-panel>
-
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 Tags
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-
-                        <!-- <button mat-stroked-button *ngFor="let tag of allTags" click="updateSelectedTags(tag); updateFilter();">{{tag}}</button> -->
                         <div class="inline-block">
                             <h5 *ngFor="let tag of allTags" class="float-left m-1">
-                                <span class="badge" (click)="updateTagFilter(tag); getRevised();" [class.badge-info]="inFilter(tagFilter, tag)">{{tag}}</span>
+                                <mat-chip-listbox>
+                                    <mat-chip class="badge" (click)="updateTagFilter(tag); getRevised();"
+                                        [class.badge-info]="inFilter(tagFilter, tag)">{{tag}}</mat-chip>
+                                </mat-chip-listbox>
                             </h5>
                         </div>
-                        
                     </mat-expansion-panel>
                 </mat-accordion>
-                
-                
-
-
             </td>
         </tr>
-
     </table>
-    
 </div>
 
 <div class="container">
-        
-        <div class="card" *ngFor="let item of searchList">
-            <img class="mat-card-avatar-overlay float-left top-0" src="{{hostAddress}}/images/logo?site={{item.item_website}}"/>
-            <div class="card-image">
-                <img class="card-image-top" src="{{item.item_img_url}}"/>
-            </div>
-            
-            <!-- <button mat-mini-fab class="m-1" title="Add to Watchlist" (click)="add()"><mat-icon>add</mat-icon></button> -->
-            <div class="inline">
-                <button mat-mini-fab color='primary' class="m-1" title="Check Price History" (click)="getPriceHistory(item.item_id)">
-                    <mat-icon>show_chart</mat-icon>
-                </button>
-                <button mat-mini-fab class="m-1" title="Remove Item" (click)="removeItem(item.item_id)">
-                    <mat-icon>close</mat-icon>
-                </button>
-                <mat-slide-toggle
-                    (change)="toggleItemEmailFlag($event, item.item_id)"
-                    [checked]="item.item_email_flag==1"
-                    class=".inner-slider"
-                    >
-                </mat-slide-toggle>
-            </div>
-            
-            <a href={{item.item_url}}>
-                <h6 class="card-title text-left p-1 m-1" title="{{item.item_name}}">{{trim(item.item_name)}}</h6>
-            </a>
-
-            <div class="card-body">
-                <table class="table table-sm table-borderless table">
-                    <tr>
-                        <td class="card-text float-left">{{item.item_rating}}</td>
-                    </tr>
-                    <!-- <tr>
-                        <td class="card-text text-muted float-left">{{environment.cINR}} {{item.item_latest_price}}</td>
-                    </tr> -->
-                </table>
-                <table class='table table-sm' style="font-size: 14px;">
-                    <tr>
-                        <td title="{{item.item_add_datetime}}" [class.bg-info]="((item.item_first_price > item.item_latest_price) && (item.item_first_price > item.item_min_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
-                            {{ ((item.item_first_price > item.item_latest_price) && (item.item_first_price > item.item_min_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price)) ? item.item_first_price:''}}
-                        </td>
-                        <td></td>
-                        <td title="{{item.item_update_datetime}}"  [class.bg-warning]="((item.item_first_price < item.item_latest_price) && (item.item_min_price < item.item_latest_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
-                            {{ ((item.item_first_price < item.item_latest_price) && (item.item_min_price < item.item_latest_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price)) ? item.item_latest_price:''}}
-                        </td>
-        
-                    </tr>
-                    <tr>
-                        <td title="{{item.item_add_datetime}}" [class.bg-info]="(item.item_first_price == item.item_min_price) || ((item.item_first_price > item.item_min_price) && (item.item_first_price < item.item_latest_price))">
-                            {{ (item.item_first_price == item.item_min_price) || ((item.item_first_price > item.item_min_price) && (item.item_first_price < item.item_latest_price)) ? item.item_first_price:''}}
-                        </td>
-                        <td [class.bg-success]="(item.item_min_price == item.item_first_price) || (item.item_min_price == item.item_latest_price) || (item.item_first_price == item.item_latest_price)">
-                            {{ (item.item_min_price == item.item_first_price) || (item.item_min_price == item.item_latest_price) || (item.item_first_price == item.item_latest_price) ? item.item_min_price:''}}
-                        </td>
-                        <td title="{{item.item_update_datetime}}" [class.bg-warning]="(item.item_min_price == item.item_latest_price) || (item.item_first_price > item.item_latest_price)">
-                            {{ (item.item_min_price == item.item_latest_price) || (item.item_first_price > item.item_latest_price)? item.item_latest_price:''}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td [class.bg-success]="((item.item_first_price > item.item_min_price) && (item.item_latest_price > item.item_first_price)) || ((item.item_latest_price > item.item_min_price) && (item.item_latest_price < item.item_first_price))">
-                            {{ ((item.item_first_price > item.item_min_price) && (item.item_latest_price > item.item_first_price)) || ((item.item_latest_price > item.item_min_price) && (item.item_latest_price < item.item_first_price)) ? item.item_min_price:''}}
-                        </td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
-            <div style="display: inline-block" class="m-0">
-
-                <span class="badge badge-info m-1 float-left" *ngFor="let t of itemTags[item.item_id]" (click)="removeTag(t.tag_id, item.item_id)">
-                    {{t.tag_text}}
-                </span>
-            
-                <div class="input-group m-1 float-left" style="max-width: 100px; max-height: 50px;">
-                    <input type="text" class="form-control rounded-0" style="border: None; border-bottom: 1px solid; height: 24px;" 
-                    placeholder="" id="input-{{item.item_id}}" [matAutocomplete] = "auto" 
-                    (keyup.enter)="addTag(item.item_id, $event.target.value); $event.target.value='';" (keyup)="getMatchingTags(item.item_id, $event.target)">
-                    
-                    <!-- <button mat-icon-button (click)="addTag(item.item_id, null)" style="height:24px; align-items:center; ">
-                        <mat-icon style="font-size: 20px;">add</mat-icon>
-                    </button> -->
-                    <mat-autocomplete #auto = "matAutocomplete">
-                        <mat-option *ngFor = "let tag of tagList" (click)="addTag(item.item_id, tag)">
-                            {{tag}}
-                        </mat-option>
-                    </mat-autocomplete>
-                    
-
-                </div>
-            </div>
-
+    <div class="card" *ngFor="let item of searchList">
+        <img class="mat-card-avatar-overlay float-left top-0"
+            src="{{hostAddress}}/static/logo/{{item.item_website}}.png" />
+        <div class="card-image">
+            <img class="card-image-top" src="{{item.item_img_url}}" />
         </div>
 
+        <div class="inline">
+            <button mat-mini-fab color='primary' class="m-1" title="Check Price History"
+                (click)="getPriceHistory(item.item_id)">
+                <mat-icon>show_chart</mat-icon>
+            </button>
+            <button mat-mini-fab class="m-1" title="Remove Item" (click)="removeItem(item.item_id)">
+                <mat-icon>close</mat-icon>
+            </button>
+            <mat-slide-toggle title="Notify?" (change)="toggleItemEmailFlag($event, item.item_id)"
+                [checked]="item.item_email_flag==1" class=".inner-slider m-1">
+            </mat-slide-toggle>
+        </div>
+
+        <a href={{item.item_url}}>
+            <h6 class="card-title text-left p-1 m-1" title="{{item.item_name}}">{{trim(item.item_name)}}</h6>
+        </a>
+
+        <div class="card-body">
+            <table class="table table-sm table-borderless table">
+                <tr>
+                    <td class="card-text float-left">{{item.item_rating}}</td>
+                </tr>
+            </table>
+            <table class='table table-sm' style="font-size: 14px;">
+                <tr>
+                    <td title="{{item.item_add_datetime}}"
+                        [class.bg-info]="((item.item_first_price > item.item_latest_price) && (item.item_first_price > item.item_min_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
+                        {{ ((item.item_first_price > item.item_latest_price) && (item.item_first_price >
+                        item.item_min_price)) || ((item.item_first_price == item.item_latest_price) &&
+                        (item.item_first_price > item.item_min_price)) ? item.item_first_price:''}}
+                    </td>
+                    <td></td>
+                    <td title="{{item.item_update_datetime}}"
+                        [class.bg-warning]="((item.item_first_price < item.item_latest_price) && (item.item_min_price < item.item_latest_price)) || ((item.item_first_price == item.item_latest_price) && (item.item_first_price > item.item_min_price))">
+                        {{ ((item.item_first_price < item.item_latest_price) && (item.item_min_price <
+                            item.item_latest_price)) || ((item.item_first_price==item.item_latest_price) &&
+                            (item.item_first_price> item.item_min_price)) ? item.item_latest_price:''}}
+                    </td>
+
+                </tr>
+                <tr>
+                    <td title="{{item.item_add_datetime}}"
+                        [class.bg-info]="(item.item_first_price == item.item_min_price) || ((item.item_first_price > item.item_min_price) && (item.item_first_price < item.item_latest_price))">
+                        {{ (item.item_first_price == item.item_min_price) || ((item.item_first_price >
+                        item.item_min_price) && (item.item_first_price < item.item_latest_price)) ?
+                            item.item_first_price:''}} </td>
+                    <td
+                        [class.bg-success]="(item.item_min_price == item.item_first_price) || (item.item_min_price == item.item_latest_price) || (item.item_first_price == item.item_latest_price)">
+                        {{ (item.item_min_price == item.item_first_price) || (item.item_min_price ==
+                        item.item_latest_price) || (item.item_first_price == item.item_latest_price) ?
+                        item.item_min_price:''}}
+                    </td>
+                    <td title="{{item.item_update_datetime}}"
+                        [class.bg-warning]="(item.item_min_price == item.item_latest_price) || (item.item_first_price > item.item_latest_price)">
+                        {{ (item.item_min_price == item.item_latest_price) || (item.item_first_price >
+                        item.item_latest_price)? item.item_latest_price:''}}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td
+                        [class.bg-success]="((item.item_first_price > item.item_min_price) && (item.item_latest_price > item.item_first_price)) || ((item.item_latest_price > item.item_min_price) && (item.item_latest_price < item.item_first_price))">
+                        {{ ((item.item_first_price > item.item_min_price) && (item.item_latest_price >
+                        item.item_first_price)) || ((item.item_latest_price > item.item_min_price) &&
+                        (item.item_latest_price < item.item_first_price)) ? item.item_min_price:''}} </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div style="display: inline-block" class="m-0">
+            <mat-chip-listbox>
+                <mat-chip class="badge badge-info m-1 float-left" color="accent" selected
+                    *ngFor="let t of itemTags[item.item_id]" (click)="removeTag(t.tag_id, item.item_id)">
+                    {{t.tag_text}}
+                </mat-chip>
+            </mat-chip-listbox>
 
 
+            <div class="input-group m-1 float-left" style="max-width: 100px; max-height: 50px;">
+                <input type="text" class="form-control rounded-0"
+                    style="border: None; border-bottom: 1px solid; height: 24px;" placeholder=""
+                    id="input-{{item.item_id}}" [matAutocomplete]="auto" (keyup.enter)="addTag(item.item_id, $event)"
+                    (keyup)="getMatchingTags(item.item_id, $event.target)">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let tag of tagList" (click)="addTag(item.item_id, tag)">
+                        {{tag}}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+    </div>
 </div>

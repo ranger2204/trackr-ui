@@ -1,72 +1,71 @@
-.card-image{
-    display: flex;
-    height: 150px;
+.card-image {
+  display: flex;
+  height: 150px;
 }
 
-.card-image-top{
-    display: block;
-    max-height:150px;
-    max-width: 150px;
-    width: auto;
-    height: auto;
-    margin: auto;
+.card-image-top {
+  display: block;
+  max-height: 150px;
+  max-width: 150px;
+  width: auto;
+  height: auto;
+  margin: auto;
 }
 
-.card{
-    position: relative;
-    width: 18rem;
-    margin: 2px
+.card {
+  position: relative;
+  width: 18rem;
+  margin: 2px;
 }
 
-.card-body{
-    padding: 1px
+.card-body {
+  padding: 1px;
 }
 
-.card:hover{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.mat-card-avatar-overlay{
-    /* z-index: 4; */
-    position: absolute;
-    max-width: 30px;
-    height: auto;
+.mat-card-avatar-overlay {
+  /* z-index: 4; */
+  position: absolute;
+  max-width: 30px;
+  height: auto;
 }
 
-.container{
-    max-width: 75%;
-    display: flex;
-    flex-flow: row wrap;
+.container {
+  max-width: 75%;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .btn {
-    padding: 1px;
+  padding: 1px;
 }
 
-.mat-icon{
-    transform: scale(0.8);
+.mat-icon {
+  transform: scale(0.8);
 }
 
 button[mat-mini-fab] {
-    transform: scale(0.8);
+  transform: scale(0.8);
 }
 
 .mat-slide-toggle {
-    transform: scale(0.8);
+  transform: scale(0.8);
 }
 
 .sidenav {
-    height: 20%;
-    position: fixed;
-    z-index: 1;
-    top: 10;
-    right: 0;
-    
+  height: 20%;
+  position: fixed;
+  z-index: 1;
+  top: 10;
+  right: 0;
 }
 
 .filtertab {
-    overflow-x: hidden;
-    padding-top: 60px;
-    width: 0;
-    transition: 0.5s;
+  overflow-x: hidden;
+  padding-top: 60px;
+  width: 0;
+  transition: 0.5s;
 }

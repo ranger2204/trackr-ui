@@ -7,41 +7,4 @@
             </button>
         </div>
     </form>
-    <mat-card *ngIf="item_details" class="w-50 m-auto align-content-center">
-        <table class="table table-borderless">
-            <tr>
-                <td><img mat-card-avatar src="{{environment.url}}/images/logo?site={{item_details.item_website}}"/></td>
-                <td colspan="2">
-                    <mat-card-title>
-                        <a href="{{item_details.item_url}}">{{item_details.item_name}}</a>
-                    </mat-card-title>
-                </td>
-                <td rowspan="2">
-                    <img mat-card-image src="{{item_details.item_img_url}}">
-                </td>
-                <td>
-                    <mat-card-actions class="float-right">
-                        <button mat-mini-fab color="primary" title="Add to TrackEmAll" (click)="add()"><mat-icon>add</mat-icon></button>
-                        <button mat-mini-fab color="accent" title="Close" (click)="close()"><mat-icon>close</mat-icon></button>
-                        <!-- <button mat-mini-fab color="warn" title="Report Bad Details"><mat-icon>report_problem</mat-icon></button> -->
-                    </mat-card-actions>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <mat-card-subtitle>{{item_details.item_rating}}</mat-card-subtitle>
-                </td>
-                <td>
-                    <mat-card-subtitle>{{environment.cINR}} {{item_details.item_first_price}}</mat-card-subtitle>
-                </td>
-                
-                
-            </tr>
-        </table>
-
- 
-
-    </mat-card>
-
 </div>
