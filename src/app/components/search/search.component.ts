@@ -133,12 +133,10 @@ export class SearchComponent implements OnInit {
   }
 
   getUpdateStats() {
-    this.searchService
-      .getUpdateStats(localStorage.getItem('hostAddress') || '')
-      .subscribe((resp: any) => {
-        this.updateStats = `${resp.data['upd_missed_items']}/${resp.data['upd_total_items']}`;
-        this.updateDateTime = `${resp.data['upd_end_datetime']}`;
-      });
+    this.searchService.getUpdateStats().subscribe((resp: any) => {
+      this.updateStats = `${resp.data['upd_missed_items']}/${resp.data['upd_total_items']}`;
+      this.updateDateTime = `${resp.data['upd_end_datetime']}`;
+    });
   }
 
   getPriceHistory(item_id: string): void {
@@ -149,7 +147,7 @@ export class SearchComponent implements OnInit {
       });
     } else {
       this.searchService
-        .getItemPriceHisory(item_id, localStorage.getItem('hostAddress') || '')
+        .getItemPriceHisory(item_id)
         .subscribe((response: any) => {
           if (response.status == 1) {
             this.itemPriceHistory[item_id] = response.data;
@@ -180,21 +178,19 @@ export class SearchComponent implements OnInit {
   }
 
   removeItem(item_id: string) {
-    this.searchService
-      .removeItem(item_id, localStorage.getItem('hostAddress') || '')
-      .subscribe((response: any) => {
-        if (response.status == 1) {
-          this.notifierService.success(response.message);
-          let filters = this.createFilters(
-            this.searchKey,
-            this.tagFilter,
-            this.priceFilter
-          );
-          this.search(filters, this.currentPage);
-        } else {
-          this.notifierService.success(response.message);
-        }
-      });
+    this.searchService.removeItem(item_id).subscribe((response: any) => {
+      if (response.status == 1) {
+        this.notifierService.success(response.message);
+        let filters = this.createFilters(
+          this.searchKey,
+          this.tagFilter,
+          this.priceFilter
+        );
+        this.search(filters, this.currentPage);
+      } else {
+        this.notifierService.success(response.message);
+      }
+    });
   }
 
   getTags() {
@@ -249,29 +245,24 @@ export class SearchComponent implements OnInit {
   search(filters: FilterConfig, page_no: number = 1) {
     let keyword = filters.keyword;
     this.getUpdateStats();
-    console.log(
-      `Searching : ${keyword} : ${localStorage.getItem('hostAddress')}`
-    );
-    this.searchService
-      .search(filters, page_no, localStorage.getItem('hostAddress') || '')
-      .subscribe((response: any) => {
-        if (response.status == 1) {
-          this.searchList = response.data;
-          this.itemTags = {};
-          for (let i = 0; i < this.searchList.length; i++) {
-            let item = this.searchList[i];
-            this.itemTags[item.item_id] = [];
-          }
-          this.getTags();
-
-          this.totalItems = response.total;
-          this.currentPage = 1;
-          this.notifierService.success(response.message);
-        } else {
-          this.notifierService.success(response.message);
-          this.searchList = [];
+    this.searchService.search(filters, page_no).subscribe((response: any) => {
+      if (response.status == 1) {
+        this.searchList = response.data;
+        this.itemTags = {};
+        for (let i = 0; i < this.searchList.length; i++) {
+          let item = this.searchList[i];
+          this.itemTags[item.item_id] = [];
         }
-      });
+        this.getTags();
+
+        this.totalItems = response.total;
+        this.currentPage = 1;
+        this.notifierService.success(response.message);
+      } else {
+        this.notifierService.success(response.message);
+        this.searchList = [];
+      }
+    });
   }
 }
 

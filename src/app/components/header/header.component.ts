@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SearchService } from '../../services/search.service';
 import { SearchResultItem } from 'src/app/models/SearchPage';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-header',
@@ -31,8 +31,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hostAddress =
-      localStorage.getItem('hostAddress') || 'http://192.168.0.157:5000/';
+    this.hostAddress = this.searchService.getTLD();
   }
 
   createSearchForm() {
@@ -50,7 +49,7 @@ export class HeaderComponent implements OnInit {
   onMutateSearch(keyword: string) {
     if (keyword.length != 0) {
       this.searchService
-        .search({ keyword: keyword, tags: '', price: '' }, 1, this.hostAddress)
+        .search({ keyword: keyword, tags: '', price: '' }, 1)
         .subscribe((response: any) => {
           if (response.status == 1) {
             this.search_list = response.data;

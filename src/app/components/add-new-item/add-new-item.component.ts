@@ -3,7 +3,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SearchService } from 'src/app/services/search.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-new-item',
@@ -12,7 +11,6 @@ import { environment } from 'src/environments/environment';
 })
 export class AddNewItemComponent implements OnInit {
   getForm: FormGroup;
-  environment: any = environment;
 
   constructor(
     private searchService: SearchService,
@@ -31,8 +29,8 @@ export class AddNewItemComponent implements OnInit {
   }
 
   onSubmit() {
-    let item_url = this.getForm.value.itemURL;
-    this.searchService.putItem(item_url).subscribe({
+    let itemURL = this.getForm.value.itemURL;
+    this.searchService.putItem(itemURL).subscribe({
       next: (response: any) => {
         if (response.status == 1) {
           this.notifierService.success(response.message);

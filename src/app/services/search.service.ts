@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { FilterConfig, SearchResultItem } from '../models/SearchPage';
 
 @Injectable({
   providedIn: 'root',
@@ -8,18 +9,18 @@ import { environment } from 'src/environments/environment';
 export class SearchService {
   constructor(private http: HttpClient) {}
 
-  getTLD(hostAddressIn: any) {
-    return hostAddressIn == "" ? localStorage.getItem('hostAddress') || environment.url : environment.url;
+  getTLD() {
+    return localStorage.getItem('hostAddress') || environment.url;
   }
 
-  getUpdateStats(hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  getUpdateStats() {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/update_history/`;
     return this.http.get(url);
   }
 
-  getMatchingTags(tagText: any) {
-    let baseURL = this.getTLD(null);
+  getMatchingTags(tagText: string) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/tag/`;
     return this.http.get(url, {
       params: {
@@ -28,18 +29,18 @@ export class SearchService {
     });
   }
 
-  getTags(items: any, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  getTags(items: SearchResultItem[]) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/tag/`;
     return this.http.get(url, {
       params: {
-        itemIds: items.map((i: any) => i.item_id).join(','),
+        itemIds: items.map((item: SearchResultItem) => item.item_id).join(','),
       },
     });
   }
 
-  addTag(itemId: string, tagText: String, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  addTag(itemId: string, tagText: String) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/tag/`;
     return this.http.put(url, {
       itemId: itemId.toString(),
@@ -47,8 +48,8 @@ export class SearchService {
     });
   }
 
-  removeTag(tagId: string, itemId: string, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  removeTag(tagId: string, itemId: string) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/tag/`;
     return this.http.delete(url, {
       params: {
@@ -58,16 +59,16 @@ export class SearchService {
     });
   }
 
-  putItem(item_url: any, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  putItem(itemURL: string) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/fetch_item/`;
     return this.http.put(url, {
-      item_url: item_url,
+      item_url: itemURL,
     });
   }
 
-  removeItem(item_id: string, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  removeItem(item_id: string) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/fetch_item/`;
     return this.http.delete(url, {
       params: {
@@ -76,22 +77,21 @@ export class SearchService {
     });
   }
 
-  search(filters: any, page_no: number = 1, hostAddress: string = "") {
-    console.log(filters);
-    let baseURL = this.getTLD(hostAddress);
+  search(filters: FilterConfig, page_no: number = 1) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/fetch_item/`;
     return this.http.get(url, {
       params: {
-        keyword: filters['keyword'],
-        tags: filters['tags'],
-        price: filters['price'],
+        keyword: filters.keyword,
+        tags: filters.tags,
+        price: filters.price,
         page_no: page_no.toString(),
       },
     });
   }
 
-  getItemPriceHisory(item_id: string, hostAddress: string = "") {
-    let baseURL = this.getTLD(hostAddress);
+  getItemPriceHisory(item_id: string) {
+    let baseURL = this.getTLD();
     let url = `${baseURL}/fetch_price/`;
     return this.http.get(url, {
       params: {
